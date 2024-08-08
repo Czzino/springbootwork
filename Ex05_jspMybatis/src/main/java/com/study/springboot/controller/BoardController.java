@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -84,20 +85,57 @@ public class BoardController {
 	public String writerForm() {
 		return "writerForm";
 	}
-	
+	/* 
+	 * 넘어온 값이 많아 객체로 받는 방식
+	 * 커멘드 객체 방식
+	  : 객체로 받을 떄 사용
+	    ** 요청시 전달값의 키(name속성의 값)을 객체에 담고자하는 필드명으로 작성
+	  
+	    스프링컨테이너가 해당 객체를 기본생성자로 생성 후 setter메소드를 호출하여 넣는다
+	    
+	 	ex)
+	 	@RequestMapping("/write")
+	 	public String write(Board b) {
+	 		String title = b.getTitle();
+	 	
+	 	}
+	 	
+	 	
+	 	- @ModelAttribute 어노테이션을 이용하는 방법
+		  : 객체로 받을 떄 사용
+		    ** 요청시 전달값의 키(name속성의 값)을 객체에 담고자하는 필드명으로 작성
+		  
+	    스프링컨테이너가 해당 객체를 기본생성자로 생성 후 setter메소드를 호출하여 넣는다
+	    
+	    	ex)
+	 	@RequestMapping("/write")
+	 	public String write(@ModelAttribute("from") Board b) {
+	 		String title = b.getTitle();
+	 	
+	 	}
+	    
+	    
+	 * 
+	 */
 	@RequestMapping("/write")
-	public String write(HttpServletRequest request) {
-		String title = request.getParameter("title");
-		String writer = request.getParameter("writer");
-		String content = request.getParameter("content");
-		
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("name", writer);
-		map.put("title", title);
-		map.put("content", content);
-		
-		
-		
-		return "redirect:list";
-	}
+ /*	public String write(Board b) {*/
+	public String write(@ModelAttribute("from") Board b) {
+ 		System.out.println("title : " + b.getTitle());
+ 		System.out.println("writer : " + b.getWriter());
+ 		System.out.println("content : " + b.getContent());
+ 		boardService.insertBoard(b);
+ 		return "redirect:list";
+ 	}
+	/*
+	 * @RequestMapping("/write") public String write(HttpServletRequest request) {
+	 * String title = request.getParameter("title"); String writer =
+	 * request.getParameter("writer"); String content =
+	 * request.getParameter("content");
+	 * 
+	 * Map<String, String> map = new HashMap<String, String>(); map.put("name",
+	 * writer); map.put("title", title); map.put("content", content); return
+	 * "redirect:list"; }
+	 */
+	
+	
 }
