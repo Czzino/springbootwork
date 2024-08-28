@@ -33,6 +33,9 @@ dependencies {
 	implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl'
 	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
 	implementation 'org.apache.tomcat.embed:tomcat-embed-el'
+	
+	// JSONObject 설정
+	implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 tasks.named('test') {
